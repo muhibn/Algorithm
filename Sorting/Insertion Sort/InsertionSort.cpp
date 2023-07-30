@@ -1,7 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <algorithm>
-
+#include <vector>
 using namespace std;
 template <class t>
 class InsertionSort
@@ -15,6 +15,10 @@ class InsertionSort
 		void number_comperason(t*,int);
 		int insertionSortComparisons(t arr[], int size);
 		void  computeAveComp();
+	    void printProbabilityTable();
+		double computeProbability(int i, int j);
+		void printProbability();
+
 		
 };
 template <class t>
@@ -112,7 +116,62 @@ void InsertionSort<t>::computeAveComp() {
     double avegcomp = totalcomp/ numpermut;
     cout<<avegcomp;
 }
+int factorial(int n)
+{
+	if(n==1||n==0)
+	 return 1;
+	 
+	return n+factorial(n-1);
+	 
+}
 
+
+template<class t>
+double InsertionSort<t>::computeProbability(int i, int j) {
+    int arr[5] = {1, 2, 3, 4};
+    int numInstances = 0;
+    for (int perm = 0; perm < factorial(i); perm++) {
+        if (arr[i - 1] == j) {
+            numInstances++;
+        }
+        next_permutation(arr, arr + i);
+    }
+    return numInstances / factorial(i);
+}
+
+template <class t>
+void InsertionSort<t>::printProbabilityTable() {
+    int P[5][5];
+    for (int i = 1; i <= 4; i++) {
+        for (int j = 1; j <= i; j++) {
+            P[i - 1][j - 1] = computeProbability(i, j);
+        }
+    }
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            cout << P[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+template<class t>
+void InsertionSort<t>::printProbability() {
+    const int n = 4; // Assuming n = 4, you can change this value as per your requirement
+    vector<vector<double> > P(n + 1, vector<double>(n + 1));
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            P[i][j] = 1.0 / i;
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            cout << "P[" << i << "," << j << "]: " << P[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
 int main()
 {
 	InsertionSort<int> obj;
@@ -130,6 +189,8 @@ int main()
 		cout<<"3 for number of comperason \n";
 		cout<<"4 for averge number of computation \n";
 		cout<<"5 for display the array \n";
+		cout<<"6 for probabilty of i \n";
+		cout <<"7 for radom input sequence \n";
 		cout<<"0 for exit ";
 		cin>>choose;
 		
@@ -145,6 +206,10 @@ int main()
 			  break;
 			case  5:obj.display(arr,size);
 			  break;
+			case  6:obj.printProbabilityTable();
+			  break;
+			case  7:obj.printProbability();
+			  break; 
 		
 			default:cout<<"Worng choose \n";
 		
